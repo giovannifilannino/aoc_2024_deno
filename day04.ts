@@ -1,10 +1,10 @@
 const XMAS = "XMAS";
+const X_MAS = ["MAS", "SAM"];
 
 function part1(lines: string[]): number {
   let xmas = 0;
   lines.forEach((line, index) => {
     const lineSplit = line.split("");
-    console.log(line);
     lineSplit.forEach((char, charIndex) => {
       if (char === "X") {
         const foundHorizontally = checkHorizontal(lineSplit, charIndex);
@@ -13,12 +13,6 @@ function part1(lines: string[]): number {
         xmas += foundHorizontally;
         xmas += foundVertifcally;
         xmas += foundDiagonally;
-        console.log(
-          `(${index}, ${charIndex})`,
-          foundDiagonally,
-          foundVertifcally,
-          foundHorizontally,
-        );
       }
     });
   });
@@ -97,8 +91,36 @@ function checkDiagonal(lines: string[], index: number, charIndex: number) {
   return found;
 }
 
-function part2(): number {
-  return 0;
+function part2(lines: string[]): number {
+  let xmas = 0;
+  lines.forEach((line, index) => {
+    const lineSplit = line.split("");
+    lineSplit.forEach((char, charIndex) => {
+      if (char === "A") {
+        const foundDiagonally = checkDiagonalXMas(lines, index, charIndex);
+        xmas += foundDiagonally;
+      }
+    });
+  });
+  return xmas;
+}
+
+function checkDiagonalXMas(lines: string[], index: number, charIndex: number) {
+  let firstDiagonal = "";
+  let secondDiagonal = "";
+  if (
+    index - 1 >= 0 && charIndex - 1 >= 0 && index + 1 < lines.length &&
+    charIndex + 1 < lines[0].length
+  ) {
+    firstDiagonal = lines[index - 1][charIndex - 1] +
+      lines[index][charIndex] + lines[index + 1][charIndex + 1];
+    secondDiagonal = lines[index - 1][charIndex + 1] +
+      lines[index][charIndex] + lines[index + 1][charIndex - 1];
+  }
+  return X_MAS.indexOf(firstDiagonal) !== -1 &&
+      X_MAS.indexOf(secondDiagonal) !== -1
+    ? 1
+    : 0;
 }
 
 export async function showResultsDay04() {
@@ -106,7 +128,7 @@ export async function showResultsDay04() {
   const lines = file.split("\n");
 
   const resultPart1 = part1(lines);
-  const resultPart2 = part2();
+  const resultPart2 = part2(lines);
   console.log("Day 04");
   console.log("--------");
   console.log(`Result part1: ${resultPart1}`);
