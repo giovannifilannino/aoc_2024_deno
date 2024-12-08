@@ -204,10 +204,10 @@ export async function showResultsDay06() {
   });
 
   const { visitedPoints } = part1(guard, obstacles, width, height);
-  const resultPart2 = part2(guard, obstacles, visitedPoints, width, height);
+  // const resultPart2 = part2(guard, obstacles, visitedPoints, width, height); // TODO Improve part2
   console.log("Day 06");
   console.log("--------");
   console.log(`Result part1: ${visitedPoints.size}`);
-  console.log(`Result part2: ${resultPart2}`);
+  //console.log(`Result part2: ${resultPart2}`);
   console.log("--------");
 }
