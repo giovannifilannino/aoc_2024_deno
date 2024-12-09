@@ -5,6 +5,7 @@ import { showResultsDay04 } from "./day04.ts";
 import { showResultsDay05 } from "./day05.ts";
 import { showResultsDay06 } from "./day06.ts";
 import { showResultsDay07 } from "./day07.ts";
+import { showResultsDay08 } from "./day08.ts";
 
 await showResultsDay01();
 await showResultsDay02();
@@ -13,3 +14,4 @@ await showResultsDay04();
 await showResultsDay05();
 await showResultsDay06();
 await showResultsDay07();
+await showResultsDay08();
