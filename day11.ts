@@ -28,15 +28,15 @@ function part1(elements: string[], blinks: number): number {
 function computeChanges(
   element: number,
   steps: number,
-  computations: Map<number, number | number[]>,
+  cache = new Map<number, number | number[]>(),
 ): number {
-  if (steps === 0) {
+  if (steps <= 0) {
     return 1;
   }
-  const foundEl = computations.get(element);
+  const foundEl = cache.get(element);
   if (!foundEl) {
     if (element === 0) {
-      return computeChanges(1, steps - 1, computations);
+      return computeChanges(1, steps - 1, cache);
     } else if (element.toString().length % 2 === 0) {
       const firstHalf = parseInt(
         element.toString().slice(0, element.toString().length / 2),
@@ -44,42 +44,42 @@ function computeChanges(
       const secondHalf = parseInt(
         element.toString().slice(element.toString().length / 2),
       );
-      computations.set(element, [firstHalf, secondHalf]);
-      return computeChanges(firstHalf, steps - 1, computations) +
-        computeChanges(secondHalf, steps - 1, computations);
-    } 
+      cache
+        .set(element, [firstHalf, secondHalf]);
+      return computeChanges(firstHalf, steps - 1, cache) +
+        computeChanges(secondHalf, steps - 1, cache);
+    }
     const result = element * 2024;
-    computations.set(element, result);
+    cache
+      .set(element, result);
     return computeChanges(
       result,
       steps - 1,
-      computations,
+      cache,
     );
   } else {
     if (Array.isArray(foundEl)) {
-      return computeChanges(foundEl[0], steps - 1, computations) +
-        computeChanges(foundEl[1], steps - 1, computations);
+      return computeChanges(foundEl[0], steps - 1, cache) +
+        computeChanges(foundEl[1], steps - 1, cache);
     } else {
-      return computeChanges(foundEl, steps -1, computations);
+      return computeChanges(foundEl, steps - 1, cache);
     }
   }
 }
 
 function part2(elements: string[], blinks: number): number {
-  const map = new Map<number, number | number[]>();
   let result = 0;
-  elements.forEach(el => {
-    result += computeChanges(parseInt(el), blinks, map);
-    console.log(result);
-  })
+  elements.forEach((el) => {
+    result += computeChanges(parseInt(el), blinks);
+  });
   return result;
 }
 
 export async function showResultsDay11() {
-  const file = await Deno.readTextFile("inputs/day11.test.txt");
+  const file = await Deno.readTextFile("inputs/day11.txt");
   const elements = file.split(" ");
 
-  const resultPart1 = part1(elements, 25);
+  const resultPart1 = part2(elements, 25);
   const resultPart2 = part2(elements, 75);
   console.log("Day 11");
   console.log("--------");
