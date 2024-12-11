@@ -134,7 +134,9 @@ function part2(
               (antinode) =>
                 !antinodes.find((an) =>
                   an.x === antinode.x && antinode.y === an.y
-                ) && !antennas.find((an) => an.x === antinode.x && antinode.y === an.y),
+                ) && !antennas.find((an) =>
+                  an.x === antinode.x && antinode.y === an.y
+                ),
             );
             antinodes.push(...newAntinodes);
           }
@@ -164,8 +166,8 @@ function getMapAntennas(lines: string[]): Map<string, Point[]> {
 
 function getAntennaAntinodes(map: Map<string, Point[]>): Point[] {
   const antennas: Point[] = [];
-  for(const key of map.keys()) {
-    if(map.get(key)!.length > 1) {
+  for (const key of map.keys()) {
+    if (map.get(key)!.length > 1) {
       antennas.push(...map.get(key)!);
     }
   }

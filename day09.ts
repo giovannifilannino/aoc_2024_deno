@@ -1,5 +1,8 @@
 function getChecksum(disk: string[]): number {
-  return disk.reduce((a, b, i) => a + (isNaN(parseInt(b)) ? 0 : parseInt(b)) * i, 0);
+  return disk.reduce(
+    (a, b, i) => a + (isNaN(parseInt(b)) ? 0 : parseInt(b)) * i,
+    0,
+  );
 }
 
 function part1(content: string[]): number {
@@ -36,7 +39,9 @@ function part2(content: string[][]): number {
     }
 
     const emptyIndex = defragmentingDisk.findIndex(
-      (x, i) => i < cursor && x.includes(".") && x.length >= defragmentingDisk[cursor].length,
+      (x, i) =>
+        i < cursor && x.includes(".") &&
+        x.length >= defragmentingDisk[cursor].length,
     );
 
     if (emptyIndex === -1) {
@@ -44,10 +49,13 @@ function part2(content: string[][]): number {
       continue;
     }
 
-    const diff = defragmentingDisk[emptyIndex].length - defragmentingDisk[cursor].length;
+    const diff = defragmentingDisk[emptyIndex].length -
+      defragmentingDisk[cursor].length;
 
     defragmentingDisk[emptyIndex] = [...defragmentingDisk[cursor]];
-    defragmentingDisk[cursor] = Array(defragmentingDisk[cursor].length).fill(".");
+    defragmentingDisk[cursor] = Array(defragmentingDisk[cursor].length).fill(
+      ".",
+    );
 
     if (diff !== 0) {
       defragmentingDisk = [
@@ -58,15 +66,18 @@ function part2(content: string[][]): number {
       cursor++;
     }
 
-    cursor--;}
+    cursor--;
+  }
 
   return getChecksum(defragmentingDisk.flat());
 }
 
-function convertStringToMapMemory(content: string): string[][]{
-  const chunkyDisk: string[][] = content 
-  .split("")
-  .map((x, i) => Array(parseInt(x)).fill(i % 2 === 0 ? Math.floor(i / 2) : "."));
+function convertStringToMapMemory(content: string): string[][] {
+  const chunkyDisk: string[][] = content
+    .split("")
+    .map((x, i) =>
+      Array(parseInt(x)).fill(i % 2 === 0 ? Math.floor(i / 2) : ".")
+    );
   return chunkyDisk;
 }
 
