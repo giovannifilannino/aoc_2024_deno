@@ -8,6 +8,7 @@ import { showResultsDay07 } from "./day07.ts";
 import { showResultsDay08 } from "./day08.ts";
 import { showResultsDay09 } from "./day09.ts";
 import { showResultsDay10 } from "./day10.ts";
+import { showResultsDay11 } from "./day11.ts";
 
 await showResultsDay01();
 await showResultsDay02();
@@ -19,3 +20,4 @@ await showResultsDay07();
 //await showResultsDay08();
 //await showResultsDay09();
 await showResultsDay10();
+await showResultsDay11();

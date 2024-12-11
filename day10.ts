@@ -10,79 +10,81 @@ function getNrOfTrails(
   lines: string[],
   lastIndex: boolean,
   hikeTrail: string[] = [],
-  memo: string[] = []
+  memo: string[] = [],
 ): number {
-    const currentChar = lines[currentPoint.y][currentPoint.x];
-    if(currentChar != hikeTrail[hikeTrail.length -1]) {
-      hikeTrail.push(`${currentChar}:${currentPoint.x+1}:${currentPoint.y+1}`);
+  const currentChar = lines[currentPoint.y][currentPoint.x];
+  if (currentChar != hikeTrail[hikeTrail.length - 1]) {
+    hikeTrail.push(
+      `${currentChar}:${currentPoint.x + 1}:${currentPoint.y + 1}`,
+    );
+  }
+  const currentNumber = parseInt(currentChar);
+  let topHikeTrail = 0;
+  let bottomHikeTrail = 0;
+  let leftHikeTrail = 0;
+  let rightHikeTrail = 0;
+  if (currentPoint.y - 1 >= 0) {
+    const topNumber = lines[currentPoint.y - 1][currentPoint.x];
+    if (parseInt(topNumber) === currentNumber + 1) {
+      topHikeTrail = getNrOfTrails(
+        { x: currentPoint.x, y: currentPoint.y - 1 },
+        lines,
+        lastIndex,
+        [...hikeTrail],
+        memo,
+      );
     }
-    const currentNumber = parseInt(currentChar);
-    let topHikeTrail = 0;
-    let bottomHikeTrail = 0;
-    let leftHikeTrail = 0;
-    let rightHikeTrail = 0;
-    if (currentPoint.y - 1 >= 0) {
-      const topNumber = lines[currentPoint.y - 1][currentPoint.x];
-      if (parseInt(topNumber) === currentNumber + 1) {
-        topHikeTrail = getNrOfTrails(
-          { x: currentPoint.x, y: currentPoint.y - 1 },
-          lines,
-          lastIndex,
-          [...hikeTrail],
-          memo
-        );
-      }
+  }
+  if (currentPoint.x - 1 >= 0) {
+    const leftNumber = lines[currentPoint.y][currentPoint.x - 1];
+    if (parseInt(leftNumber) === currentNumber + 1) {
+      leftHikeTrail = getNrOfTrails(
+        { x: currentPoint.x - 1, y: currentPoint.y },
+        lines,
+        lastIndex,
+        [...hikeTrail],
+        memo,
+      );
     }
-    if (currentPoint.x - 1 >= 0) {
-      const leftNumber = lines[currentPoint.y][currentPoint.x - 1];
-      if (parseInt(leftNumber) === currentNumber + 1) {
-        leftHikeTrail = getNrOfTrails(
-          { x: currentPoint.x - 1, y: currentPoint.y },
-          lines,
-          lastIndex,
-          [...hikeTrail],
-          memo
-        );
-      }
+  }
+  if (currentPoint.y + 1 < lines.length) {
+    const bottomNumber = lines[currentPoint.y + 1][currentPoint.x];
+    if (parseInt(bottomNumber) === currentNumber + 1) {
+      bottomHikeTrail = getNrOfTrails(
+        { x: currentPoint.x, y: currentPoint.y + 1 },
+        lines,
+        lastIndex,
+        [...hikeTrail],
+        memo,
+      );
     }
-    if (currentPoint.y + 1 < lines.length) {
-      const bottomNumber = lines[currentPoint.y + 1][currentPoint.x];
-      if (parseInt(bottomNumber) === currentNumber + 1) {
-        bottomHikeTrail = getNrOfTrails(
-          { x: currentPoint.x, y: currentPoint.y + 1 },
-          lines,
-          lastIndex,
-          [...hikeTrail],
-          memo
-        );
-      }
+  }
+  if (currentPoint.x + 1 < lines[0].length) {
+    const rigthNumber = lines[currentPoint.y][currentPoint.x + 1];
+    if (parseInt(rigthNumber) === currentNumber + 1) {
+      rightHikeTrail = getNrOfTrails(
+        { x: currentPoint.x + 1, y: currentPoint.y },
+        lines,
+        lastIndex,
+        [...hikeTrail],
+        memo,
+      );
     }
-    if (currentPoint.x + 1 < lines[0].length) {
-      const rigthNumber = lines[currentPoint.y][currentPoint.x + 1];
-      if (parseInt(rigthNumber) === currentNumber + 1) {
-        rightHikeTrail = getNrOfTrails(
-          { x: currentPoint.x + 1, y: currentPoint.y },
-          lines,
-          lastIndex,
-          [...hikeTrail],
-          memo
-        );
-      }
+  }
+  if (hikeTrail.length === 10) {
+    const value = hikeTrail.map((el) => el.split(":")[0]).join("");
+    const key = generateKey(hikeTrail, lastIndex);
+    const isNew = !memo.includes(key);
+    if (value === CORRECT_TRAIL && isNew) {
+      memo.push(key);
+      return 1;
     }
-    if(hikeTrail.length === 10) {
-      const value = hikeTrail.map(el => el.split(":")[0]).join("");
-      const key = generateKey(hikeTrail, lastIndex);
-      const isNew = !memo.includes(key);
-      if(value === CORRECT_TRAIL && isNew) {
-        memo.push(key);
-        return 1;
-      }
-    }
-    return bottomHikeTrail + topHikeTrail + leftHikeTrail + rightHikeTrail;
+  }
+  return bottomHikeTrail + topHikeTrail + leftHikeTrail + rightHikeTrail;
 }
 
 function generateKey(hikeTrail: string[], lastIndex: boolean): string {
-  const coordinates = hikeTrail.map(el => el.split(":").slice(1).join(":"));
+  const coordinates = hikeTrail.map((el) => el.split(":").slice(1).join(":"));
   return lastIndex ? coordinates[coordinates.length - 1] : coordinates.join("");
 }
 
