@@ -26,45 +26,37 @@ function part1(elements: string[], blinks: number): number {
 }
 
 function computeChanges(
-  element: number,
-  steps: number,
-  cache = new Map<number, number | number[]>(),
+    element: number,
+    steps: number,
+    cache = new Map<string, number>(),
 ): number {
+  const key = `${element}-${steps}`;
   if (steps <= 0) {
     return 1;
   }
-  const foundEl = cache.get(element);
-  if (!foundEl) {
-    if (element === 0) {
-      return computeChanges(1, steps - 1, cache);
-    } else if (element.toString().length % 2 === 0) {
-      const firstHalf = parseInt(
-        element.toString().slice(0, element.toString().length / 2),
-      );
-      const secondHalf = parseInt(
-        element.toString().slice(element.toString().length / 2),
-      );
-      cache
-        .set(element, [firstHalf, secondHalf]);
-      return computeChanges(firstHalf, steps - 1, cache) +
-        computeChanges(secondHalf, steps - 1, cache);
-    }
-    const result = element * 2024;
-    cache
-      .set(element, result);
-    return computeChanges(
-      result,
-      steps - 1,
-      cache,
-    );
-  } else {
-    if (Array.isArray(foundEl)) {
-      return computeChanges(foundEl[0], steps - 1, cache) +
-        computeChanges(foundEl[1], steps - 1, cache);
-    } else {
-      return computeChanges(foundEl, steps - 1, cache);
-    }
+  if (cache.has(key)) {
+    return cache.get(key) as number;
   }
+
+  let result: number;
+  if (element === 0) {
+    result = computeChanges(1, steps - 1, cache);
+  } else if (element.toString().length % 2 === 0) {
+    const firstHalf = parseInt(
+        element.toString().slice(0, element.toString().length / 2),
+    );
+    const secondHalf = parseInt(
+        element.toString().slice(element.toString().length / 2),
+    );
+    result = computeChanges(firstHalf, steps - 1, cache) +
+        computeChanges(secondHalf, steps - 1, cache);
+  } else {
+    const newElement = element * 2024;
+    result = computeChanges(newElement, steps - 1, cache);
+  }
+
+  cache.set(key, result);
+  return result;
 }
 
 function part2(elements: string[], blinks: number): number {
